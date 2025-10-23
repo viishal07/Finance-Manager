@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { addTransaction } from '../utils/api';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const AddTransaction = ({ onTransactionAdded }) => {
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         amount: '',
         type: 'expense',
@@ -20,7 +22,8 @@ const AddTransaction = ({ onTransactionAdded }) => {
             setFormData({ amount: '', type: 'expense', description: '' });
             toast.success('Transaction added successfully!');
         } catch (error) {
-            toast.error('Error adding transaction');
+            toast.error(error || 'Error adding transaction');
+            console.error('Transaction error:', error);
         }
     };
 
