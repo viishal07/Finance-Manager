@@ -33,6 +33,21 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/users', require('./routes/users'));
 
+// Test routes for debugging
+app.get('/api/users', (req, res) => {
+    res.json({ 
+        message: 'Users API endpoint is working',
+        availableRoutes: ['/api/users/register', '/api/users/login', '/api/users/profile']
+    });
+});
+
+app.get('/api/transactions', (req, res) => {
+    res.json({ 
+        message: 'Transactions API endpoint is working',
+        availableRoutes: ['GET /api/transactions', 'POST /api/transactions', 'DELETE /api/transactions/:id']
+    });
+});
+
 // API routes only - no static file serving in serverless environment
 app.get('/', (req, res) => {
     res.json({ 
