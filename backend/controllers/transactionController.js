@@ -21,9 +21,6 @@ const addTransaction = async (req, res, next) => {
             type,
             description
         });
-        // Emit event
-        const io = req.app.get('io');
-        io.emit('transactionAdded', transaction);
         res.status(201).json(transaction);
     } catch (error) {
         res.status(400);
@@ -47,9 +44,6 @@ const deleteTransaction = async (req, res, next) => {
         }
         
         await transaction.deleteOne();
-        // Emit event
-        const io = req.app.get('io');
-        io.emit('transactionDeleted', req.params.id);
         res.json({ id: req.params.id });
     } catch (error) {
         res.status(404);
