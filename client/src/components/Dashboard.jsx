@@ -8,9 +8,6 @@ import TransactionList from './TransactionList';
 import ThemeToggle from './ThemeToggle';
 import { getTransactions } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:5000');
 
 function Dashboard() {
     const [transactions, setTransactions] = useState([]);
@@ -38,23 +35,6 @@ function Dashboard() {
             }
         };
         fetchTransactions();
-
-        // Listen for real-time events
-        socket.on('transactionAdded', (transaction) => {
-            // Only add transaction if it belongs to current user
-            if (transaction.user === user.id) {
-                setTransactions(prev => [transaction, ...prev]);
-            }
-        });
-        socket.on('transactionDeleted', (id) => {
-            setTransactions(prev => prev.filter(t => t._id !== id));
-        });
-
-        // Clean up listeners on unmount
-        return () => {
-            socket.off('transactionAdded');
-            socket.off('transactionDeleted');
-        };
     }, [user, navigate]);
 
     const handleTransactionAdded = (newTransaction) => {
