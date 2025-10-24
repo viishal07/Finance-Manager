@@ -9,16 +9,29 @@ const USERS_URL = `${API_BASE_URL}/users`;
 export const registerUser = async (userData) => {
     try {
         console.log('Registering user with URL:', `${USERS_URL}/register`);
-        const response = await axios.post(`${USERS_URL}/register`, userData);
+        console.log('Full API URL:', API_BASE_URL);
+        console.log('User data:', userData);
+        
+        const response = await axios.post(`${USERS_URL}/register`, userData, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            timeout: 10000 // 10 second timeout
+        });
+        
+        console.log('Registration successful:', response.data);
         if (response.data) {
             localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;
     } catch (error) {
         console.error('Registration error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error code:', error.code);
         console.error('Response data:', error.response?.data);
         console.error('Response status:', error.response?.status);
-        throw error.response?.data?.message || 'Error registering user';
+        console.error('Response headers:', error.response?.headers);
+        throw error.response?.data?.message || error.message || 'Error registering user';
     }
 };
 
@@ -44,6 +57,19 @@ export const logout = () => {
 
 export const getCurrentUser = () => {
     return JSON.parse(localStorage.getItem('user'));
+};
+
+// Test API connectivity
+export const testAPI = async () => {
+    try {
+        console.log('Testing API connectivity...');
+        const response = await axios.get(API_BASE_URL.replace('/api', ''));
+        console.log('API test successful:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('API test failed:', error);
+        throw error;
+    }
 };
 
 // Helper function to get auth config
