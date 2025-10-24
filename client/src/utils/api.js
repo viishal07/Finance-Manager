@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use environment variables for API URL in production
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://finance-manager-79a56dkdw-viishal07s-projects.vercel.app/api';
 const TRANSACTIONS_URL = `${API_BASE_URL}/transactions`;
 const USERS_URL = `${API_BASE_URL}/users`;
 
