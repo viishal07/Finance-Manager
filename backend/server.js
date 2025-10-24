@@ -15,13 +15,8 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:5173',
-        'https://your-netlify-site.netlify.app', // Replace with your actual Netlify URL
-        /\.netlify\.app$/
-    ],
-    credentials: true
+    origin: '*', // Allow all origins for now
+    credentials: false
 }));
 
 // Use morgan logger only in development
