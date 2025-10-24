@@ -2,7 +2,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
-const path = require('path');
 const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const http = require('http');
@@ -37,26 +36,37 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/users', require('./routes/users'));
 
-// Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-    // Set static folder
-    const __dirname = path.resolve();
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-    
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+// API routes only - no static file serving in serverless environment
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Finance Manager API is running...',
+        endpoints: {
+            users: '/api/users',
+            transactions: '/api/transactions'
+        }
     });
-} else {
-    app.get('/', (req, res) => {
-        res.send('API is running...');
+});
+
+app.get('/api', (req, res) => {
+    res.json({ 
+        message: 'Finance Manager API is running...',
+        endpoints: {
+            users: '/api/users',
+            transactions: '/api/transactions'
+        }
     });
-}
+});
 
 // Error handler
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// For Vercel deployment
+if (process.env.NODE_ENV === 'production') {
+    module.exports = app;
+} else {
+    server.listen(PORT, () => {
+        console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
+}
