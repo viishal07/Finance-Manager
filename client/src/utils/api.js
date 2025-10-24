@@ -8,24 +8,32 @@ const USERS_URL = `${API_BASE_URL}/users`;
 // Auth API calls
 export const registerUser = async (userData) => {
     try {
+        console.log('Registering user with URL:', `${USERS_URL}/register`);
         const response = await axios.post(`${USERS_URL}/register`, userData);
         if (response.data) {
             localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;
     } catch (error) {
+        console.error('Registration error details:', error);
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
         throw error.response?.data?.message || 'Error registering user';
     }
 };
 
 export const loginUser = async (userData) => {
     try {
+        console.log('Logging in with URL:', `${USERS_URL}/login`);
         const response = await axios.post(`${USERS_URL}/login`, userData);
         if (response.data) {
             localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;
     } catch (error) {
+        console.error('Login error details:', error);
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
         throw error.response?.data?.message || 'Error logging in';
     }
 };
