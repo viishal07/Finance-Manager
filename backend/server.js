@@ -37,10 +37,19 @@ app.get('/api/test', (req, res) => {
 app.get('/', (req, res) => {
     res.json({ 
         message: 'Finance Manager API is running...',
+        timestamp: new Date().toISOString(),
         endpoints: {
             users: '/api/users',
             transactions: '/api/transactions'
         }
+    });
+});
+
+// Simple health check
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'OK',
+        timestamp: new Date().toISOString()
     });
 });
 
